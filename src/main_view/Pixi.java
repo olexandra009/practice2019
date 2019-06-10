@@ -13,6 +13,7 @@ public class Pixi extends JFrame{
 	}
 	
 	public static void main(String[] args) {
+		System.out.println("Hi");
 		new Pixi();
 	}
 }
