@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -29,7 +31,6 @@ import main_view.MainMenu;
 
 public class RandomNumbers extends JPanel {
 	protected static RandomNumbers randomNumbers;
-	private int score = 0;
 	static int jeneralscore = 0;
 
 	private JPanel examplePanel;
@@ -63,6 +64,7 @@ public class RandomNumbers extends JPanel {
 	/** Method that initialize initial properties */
 	private void initializeAll() {
 		setSize(600, 600);
+		setBackground(new Color(100,205,100));
 		//setLocation(300, 200);
 		random = new Random();
 		setLayout(new BorderLayout());
@@ -76,6 +78,7 @@ public class RandomNumbers extends JPanel {
 		help = new ButtonHelp();
 		buttonSet = new ButtonSet();
 		buttomBack = new ButtonBackFromSet();
+		
 
 		// 2
 		setPropertiesPanel = new SetPropertiesPanel();
@@ -88,9 +91,11 @@ public class RandomNumbers extends JPanel {
 
 		// 1
 		examplePanel = new JPanel(new GridLayout(5, 1, 10, 10));
+
+		examplePanel.setBackground(new Color(100,205,100));
 		examplePanel = addExamplesToPanel();
 		buttonsMenu = new ButtonsMenu();
-
+		buttonsMenu.setBackground(new Color(100,205,100));
 		add(rools, BorderLayout.NORTH);
 		add(examplePanel, BorderLayout.CENTER);
 		add(buttonsMenu, BorderLayout.SOUTH);
@@ -133,7 +138,7 @@ public class RandomNumbers extends JPanel {
 		int number1 = 0;
 		int number2 = 0;
 		String example = null;
-		for (int i = 0; i < amountOfExamples; i++) {
+		for (int i = 0; i <amountOfExamples; i++) {
 			int opp = random.nextInt(maxOperator);
 			if (opp == 0) {
 				number1 = random.nextInt(maxNumber);
@@ -172,7 +177,7 @@ public class RandomNumbers extends JPanel {
 		}
 
 	}
-
+/**if user decided to cancel its options*/
 	class ButtonCancel implements ActionListener {
 
 		@Override
@@ -196,12 +201,14 @@ public class RandomNumbers extends JPanel {
 			// 2
 			removeAll();
 			setPropertiesPanel = new SetPropertiesPanel();
+			setPropertiesPanel.setBackground(new Color(100,205,200));
 			buttonsMenu = new ButtonsMenu();
 			propertiesMenu = new ProperiesMenu();
 			add(setPropertiesPanel, BorderLayout.CENTER);
 			add(propertiesMenu, BorderLayout.SOUTH);
 			setPropertiesPanel.setVisible(true);
 			propertiesMenu.setVisible(true);
+			propertiesMenu.setBackground(new Color(100,205,200));
 			revalidate();
 
 		}
@@ -217,38 +224,19 @@ public class RandomNumbers extends JPanel {
 		}
 
 		private void checkAnswers() {
-			jeneralscore = score;
-			score = 0;
 			for (int i = 0; i < answerFields.size(); i++) {
 				if (Integer.parseInt(answerFields.get(i).getText()) == examples.get(questionFields.get(i).getText())) {
 					answerFields.get(i).setBackground(Color.GREEN);
-					score += 1;
 					amountOfSolvedExamples++;
 				} else {
 					answerFields.get(i).setBackground(Color.red);
-					score -= 2;
 					return;
 				}
 			}
 
-			jeneralscore += score;
+			jeneralscore += 1;
 
-			// TODO:Р”РћР”РђРўР� Р Р†Р’РќР† Р’ Р—РђР›Р•Р–РќРћРЎРўР† Р’Р†Р” РЎРљРћР РЈ
-			if (!propertiesSet) {
-				if (amountOfSolvedExamples >= 65)
-					maxNumbersValue = 1000;
-				else if (amountOfExamples >= 50)
-					maxOperator = 4;
-				else if (amountOfSolvedExamples > 35)
-					maxNumbersValue = 300;
-				else if (amountOfSolvedExamples >= 30)
-					maxOperator = 3;
-				else if (amountOfSolvedExamples >= 20)
-					maxNumbersValue = 100;
-				if (amountOfSolvedExamples >= 15)
-					maxOperator = 2;
-			}
-
+			
 			
 			addExamplesToPanel();
 			examplePanel.revalidate();  
@@ -324,6 +312,7 @@ public class RandomNumbers extends JPanel {
 			maxOperator = editComboBox.getSelectedIndex() + 1;
 			maxNumbersValue = (Integer) maxValueSpinner.getValue();
 			System.out.println("maxValue " + maxNumbersValue + maxOperator + "-maxOperator");
+			
 		}
 	}
 
@@ -334,6 +323,7 @@ public class RandomNumbers extends JPanel {
 			System.out.println("maxValue " + maxNumbersValue + maxOperator + "-maxOperator");
 			removeAll();
 			addExamplesToPanel();
+			examplePanel.setBackground(new Color(100,205,100));
 		//	buttonsMenu=new ButtonsMenu();
 			add(rools,BorderLayout.NORTH);
 			add(examplePanel,BorderLayout.CENTER);
@@ -343,27 +333,5 @@ public class RandomNumbers extends JPanel {
 
 		}
 	}
-
-	// /**
-	// * Method that generate and draw 10 examples
-	// */
-	// private void drawExamples(Graphics g) {
-	// generate(10, 4, 100);
-	//
-	// g.setFont(new Font("Robo", 20, 20));
-	// int i = 0;
-	//
-	// for (Map.Entry<String, Integer> x : examples.entrySet()) {
-	// g.drawRect(yPosotion - 20, xPosition - delayForTipAnswer, delayForTipAnswer,
-	// delayForTipAnswer);
-	// g.drawString(x.getKey(), yPosotion, xPosition);
-	//
-	// // here will be checking for tips in order to know what put
-	// // drawdrawCheckMark();
-	//
-	// xPosition += 40;
-	//
-	// }
-	// }
 
 }

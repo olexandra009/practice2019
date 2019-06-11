@@ -1,6 +1,7 @@
 package math;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -29,11 +30,14 @@ public class ButtonsMenu extends JPanel {
 
 		properties = new JButton("Properties");
 		properties.setSize(100, 100);
+		properties.setBackground(new Color(100,205,100));
 		
 		JPanel grid = new JPanel(new GridLayout(1, 2, 5, 0));
 		setBounds(new Rectangle(10, 10, 100, 100));
 		ok = new JButton("OK");
+		ok.setBackground(new Color(100,205,100));
 		cancel = new JButton("Exit");
+		cancel.setBackground(new Color(100,205,100));
 		grid.add(ok);
 		
 		flow = new JPanel(new FlowLayout(FlowLayout.RIGHT));

@@ -16,18 +16,18 @@ import javax.swing.Timer;
 
 import main_view.MainMenu;
 
-public class TriangleCircle extends JPanel implements ActionListener{
+public class TriangleCircle extends JPanel implements ActionListener {
 	private Random random;
 	private static final int WIDTH = 600;
 	private static final int HEIGHT = 600;
 	private static final int maxFigureWidth = 60;
 	private static final int maxFigureHeight = 80;
-	
+
 	private Color mainColor;
 	private String mainTextColor;
 
 	/** BORDER FOR GAMING FIELD */
-	private int borderStartX = WIDTH / 14;
+	private int borderStartX = WIDTH / 4;
 	private int borderStartY = HEIGHT / 8;
 
 	private int widthBorder = WIDTH - WIDTH / 6;
@@ -36,8 +36,7 @@ public class TriangleCircle extends JPanel implements ActionListener{
 	public static int timerDifference = 1;
 	public static boolean shouldChangeTimerColor = false;
 	private int levelDifficulty = 5;
-	private int addSocre = 3;
-	public static boolean timerEnded=false;
+	public static boolean timerEnded = false;
 
 	CopyOnWriteArrayList<Figure> figures;
 	CopyOnWriteArrayList<Figure> figuresToBeChoosen;
@@ -52,14 +51,14 @@ public class TriangleCircle extends JPanel implements ActionListener{
 	private Timer timer;
 
 	public TriangleCircle(MainMenu mainMenu) {
-		mainm=mainMenu;
+		mainm = mainMenu;
 		initializeAll();
 		revalidate();
-		
+
 	}
 
 	private void initializeAll() {
-		setBackground(Color.white);
+		setBackground(new Color(10, 255, 70));
 		setSize(WIDTH, HEIGHT);
 		setLocation(300, 200);
 		random = new Random();
@@ -71,21 +70,8 @@ public class TriangleCircle extends JPanel implements ActionListener{
 		setLayout(new BorderLayout());
 		threadPanel = new ThreadPanel();
 		add(threadPanel, BorderLayout.NORTH);
-		timer = new Timer(1000,this);
+		timer = new Timer(1000, this);
 		timer.start();
-	}
-
-	public void repp() {
-		while (true) {
-			repaint();
-			try {
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-
 	}
 
 	/** Method that draws square or rectangle in game */
@@ -110,19 +96,20 @@ public class TriangleCircle extends JPanel implements ActionListener{
 		g.drawString(text, borderStartX + 150, borderStartY - 25);
 	}
 
+	/** method that update score */
 	private void drawScore(Graphics g) {
+		g.setColor(Color.black);
 		if (generalScore < 0)
 			generalScore = 0;
 		String score = "Score: " + generalScore;
 		g.drawString(score, borderStartX - 40, borderStartY - 25);
 
 	}
-
+/**method that clean sreen after gane over*/
 	void deleteAll(Graphics g) {
 		setBackground(Color.white);
 		g.fillRect(0, 0, WIDTH, WIDTH);
 		remove(threadPanel);
-
 
 	}
 
@@ -131,16 +118,15 @@ public class TriangleCircle extends JPanel implements ActionListener{
 		super.paintComponent(g);
 		drawBorder(g);
 		drawScore(g);
-		if(timerEnded)
-		{
+		if (timerEnded) {
 			setVisible(false);
 			mainm.setVisible(true);
-			mainm.score+=addSocre;
-			timerEnded=false;
+			mainm.score += generalScore;
+			timerEnded = false;
 			timer.stop();
 			return;
 		}
-	
+
 		if (shouldCreateNewFigures) {
 			shouldChoseMainColor = true;
 			figures = new CopyOnWriteArrayList<Figure>();
@@ -162,7 +148,7 @@ public class TriangleCircle extends JPanel implements ActionListener{
 			shouldCreateNewFigures = true;
 			repaint();
 		}
-		
+
 	}
 
 	/** Method that delete extra figures */
@@ -185,7 +171,7 @@ public class TriangleCircle extends JPanel implements ActionListener{
 
 	/** Border , where figures exists */
 	private void drawBorder(Graphics g) {
-		g.setColor(Color.gray);
+		g.setColor(Color.orange);
 		g.drawRect(borderStartX - 10, borderStartY - 10, widthBorder + 20, heightBorder + 20);
 		g.fillRect(borderStartX, borderStartY, widthBorder, heightBorder);
 
@@ -360,16 +346,16 @@ public class TriangleCircle extends JPanel implements ActionListener{
 			Point p = new Point(arg0.getX(), arg0.getY());
 			for (Figure r : figures) {
 				if (r.hadInsidePoint(p) && r.getColor() == mainColor) {
-					//System.out.println("Should repaint");
+					// System.out.println("Should repaint");
 					shouldRepaintExisted = true;
 					repaint();
 					figures.remove(r);
 					figuresToBeChoosen.remove(r);
-					generalScore += addSocre;
+					generalScore += 1;
 					break;
 				} else if (r.hadInsidePoint(p)) {
 					timerWidth -= 15;
-					generalScore -= addSocre - 1;
+					generalScore -= 2;
 					shouldChangeTimerColor = true;
 				}
 
@@ -381,17 +367,17 @@ public class TriangleCircle extends JPanel implements ActionListener{
 				shouldRepaintExisted = false;
 				repaint();
 			}
-			if (generalScore > 120 && shouldCreateNewFigures == true/**&&timerEnded*/) {
+			if (generalScore > 120 && shouldCreateNewFigures == true/** &&timerEnded */
+			) {
 				System.out.println("HEEETEEEEEEE");
-				if(levelDifficulty<20)
+				if (levelDifficulty < 20)
 					levelDifficulty += 1;
-				generalScore=0;
-				timerEnded=true;
+				generalScore = 0;
+				timerEnded = true;
 				repaint();
-				timerEnded=false;
+				timerEnded = false;
 			}
-			if(restartGame)
-			{
+			if (restartGame) {
 				removeAll();
 			}
 		}
@@ -399,15 +385,13 @@ public class TriangleCircle extends JPanel implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(timerEnded)
-		{
+		if (timerEnded) {
 			repaint();
 			timer.stop();
 			System.out.println("TIMER ENDED");
-		}
-		else 
+		} else
 			System.out.println("NOT YET");
-		
+
 	}
 
 }

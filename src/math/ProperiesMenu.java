@@ -19,7 +19,9 @@ public class ProperiesMenu extends JPanel {
 	}
 
 	private void initializeAll() {
+
 		back = new JButton("Back");
+		back.setBackground(new Color(100,205,200));
 		back.setSize(100, 100);
 		back.setToolTipText("If you dont want to set new properties push this buttomn");
 
@@ -27,6 +29,7 @@ public class ProperiesMenu extends JPanel {
 		JPanel grid = new JPanel(new GridLayout(1, 2, 5, 0));
 		setBounds(new Rectangle(10, 10, 100, 100));
 		set = new JButton("Set");
+		set.setBackground(new Color(100,205,200));
 		grid.add(set);
 		flow = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		flow.add(grid);

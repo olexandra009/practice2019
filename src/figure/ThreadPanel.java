@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 public class ThreadPanel extends JPanel {
 
 	/** BORDER FOR GAMING FIELD */
-	private int borderStartX = 60;
+	private int borderStartX = 600 / 4;
 	private int borderStartY = 5;
 	volatile boolean running = true;
 	Graphics g;
@@ -22,8 +22,8 @@ public class ThreadPanel extends JPanel {
 	}
 
 	public void initializeAll() {
+		setBackground(new Color(10, 255, 70));
 		setSize(300, 600);
-		setBackground(Color.WHITE);
 		setLayout(new BorderLayout());
 		JLabel lBEL = new JLabel("Time left: ");
 		add(lBEL , BorderLayout.WEST);
@@ -56,6 +56,7 @@ public class ThreadPanel extends JPanel {
 
 	}
 
+	/**Timer count in seperate thread*/
 	class MyThread extends Thread {
 		Graphics g;
 
@@ -78,15 +79,4 @@ public class ThreadPanel extends JPanel {
 			}
 		}
 	}
-
-	// class ExitButtonListener implements ActionListener {
-	//
-	// @Override
-	// public void actionPerformed(ActionEvent e) {
-	// removeAll();
-	// timerThread.interrupt();
-	// setBackground(Color.BLACK);
-	//
-	// }
-	//
 }
