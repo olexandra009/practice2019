@@ -2,6 +2,8 @@ package main_view;
 
 import javax.swing.JFrame;
 
+
+@SuppressWarnings("serial")
 public class Pixi extends JFrame{
 
 	public Pixi() {
@@ -13,7 +15,7 @@ public class Pixi extends JFrame{
 	}
 	
 	public static void main(String[] args) {
-		System.out.println("Hi");
+		
 		new Pixi();
 	}
 }

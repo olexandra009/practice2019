@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -15,36 +13,58 @@ import javax.swing.JPanel;
 import main_view.MainMenu;
 import tools.Queue;
 
+
+/**Клас що відповідає за логіку і виконання гри Запам'ятай ліхтар
+ * @author Alexandra
+ *
+ */
 @SuppressWarnings("serial")
 public class BoardLightGame extends JPanel{
+	
+	/**Розміри ігрового поля*/
 	private final int SCREEN_WIDTH = 600;
 	private final int SCREEN_HEIGHT = 600;
-	//визначає розмір сітки 
+	/**Розміри ігрової сітки*/
 	private int block_count = 0;
 	private final int[] BLOCK_COUNT_LEVEL = {3, 4, 5, 6, 8};
 	private final int[] MAX_COLOR_BLOCK_ON_LEVEL = {4, 8, 9, 10, 13};
-	private int level = 0;
+	/**Змінні що визнаючають хід гри*/
+	private int score=0;
+	private boolean [][] gameArray;
+	private int showLights = 3;
+	
+	/**Індикатори ігрового процесу*/
 	private boolean inGame = false;
 	private boolean fail = false;
-	private boolean gameColorBlockPaint= true;
-	private boolean [][] gameArray;
-	private int score=0;
-	private Random random; 
-	Queue<Integer> positionCheck;
-	private int showLights = 3;
-	Queue<Integer> position;
-	LightWorker worker ;
 	private boolean nextLevel = true;
-	MainMenu mainm;
-	public BoardLightGame(MainMenu m) {
-		setBackground(Color.white);
+	
+	/**Черги для перевірки відповідей*/
+	private Queue<Integer> positionCheck;
+	private Queue<Integer> position;
+	
+	private Random random; 
+
+	private LightWorker worker;
+	private MainMenu mainm;
+	private LightPanel lp;
+	
+	
+	/**Конструктор гри
+	 * @param m - головне меню
+	 * @param panel - ігрова панель
+	 */
+	public BoardLightGame(MainMenu m, LightPanel panel) {
+		
 		setVisible(true);
         setSize(new Dimension( 600, 600));
         mainm = m;
+        lp = panel;
 	}
 
+	/** Метод що запускає гру
+	 * @return
+	 */
 	public int runGame() {
-    
         addMouseListener(new MyMouseListeners());
         random = new Random();
         positionCheck = new Queue<>();
@@ -65,7 +85,7 @@ public class BoardLightGame extends JPanel{
 		System.out.println("Repaint");
 		
 	}
-
+	/**Метод що промальовує кінцевий результат*/
 	private void drawLast(Graphics g) {
 		g.setColor(Color.WHITE);
 		g.fillRect(150, 150, 300, 300);
@@ -76,7 +96,7 @@ public class BoardLightGame extends JPanel{
 		g.drawRect(270, 400, 60, 30);
 		g.drawString("Back", 278, 421);
 	}
-
+	/**Метод що промальвує ліхтарі*/
 	private void gameDraw(Graphics g) {
 		int d_wid = SCREEN_WIDTH/gameArray.length;
 		int d_hei = SCREEN_HEIGHT/gameArray.length;
@@ -91,7 +111,7 @@ public class BoardLightGame extends JPanel{
 				}
 	
 	}
-
+	/**Метод що обраховує позицію кліка людини і перевіряє чи правильно вибрана клітинка*/
 	private void drawLight(int x, int y){
 		if(!positionCheck.isEmpty())
 	    {
@@ -106,16 +126,12 @@ public class BoardLightGame extends JPanel{
 				inGame = false;
 				fail = true;
 			}
-			else {
-				
-			}
-			
 	    }
-		
-	
 	}
 	
 	private void drawMaze(Graphics g) {
+		g.setColor(Color.WHITE);
+		g.fillRect(0, 0, 600, 600);
 		 g.setColor(new Color(13, 123, 12));
 		  int d_wid = SCREEN_WIDTH/gameArray.length;
 		  int d_hei = SCREEN_HEIGHT/gameArray.length;
@@ -131,8 +147,8 @@ public class BoardLightGame extends JPanel{
 	
 	
 	
-	//створюємо пусту чергу подій
-	//на кількість ліхтарів вираховуємо їх місце розташування
+	/***створюємо пусту чергу подій
+	на кількість ліхтарів вираховуємо їх місце розташування*/
 	
 	private void gameStartShow() {
 		gameArray = new boolean[BLOCK_COUNT_LEVEL[block_count]] [BLOCK_COUNT_LEVEL[block_count]];
@@ -168,37 +184,32 @@ public class BoardLightGame extends JPanel{
 
 	}
 
+	/** Клас для використання потоку, який послідовно підсвічує клітинки
+	 * @author Alexandra
+	 *
+	 */
 	class LightWorker extends Thread{
 		
 		@Override
 		public void run() {
 			super.run();
-			System.out.println("Worker run");
 			try {
 				Thread.sleep(700);
 				gameStartShow();
-				System.out.println("Worker run::after show game");
 				while(!position.isEmpty())
 				{
-					System.out.println("Worker run::after show game:: show light");
 					int sq  = position.dequeue();
 					positionCheck.enqueue(sq);
 					int x = sq%BLOCK_COUNT_LEVEL[block_count];
 					int y = (sq-x)/BLOCK_COUNT_LEVEL[block_count];
 					gameArray[x][y] = true;
-					gameColorBlockPaint= true;
-					repaint();
-					System.out.println("Worker run::after show game:: repaint");
+			     	repaint();
 					Thread.sleep(500);
-					System.out.println("Worker run::after show game:: sleep");
 				}
-				System.out.println("Worker run::after show game:: clean");
 				gameArray = new boolean[BLOCK_COUNT_LEVEL[block_count]] [BLOCK_COUNT_LEVEL[block_count]];
-				System.out.println("Worker run::after show game:: repaint");
 				repaint();
 				nextLevel = false;
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -207,30 +218,30 @@ public class BoardLightGame extends JPanel{
 	}
 	
 
+	/** Клас що опрацьовує натискання миші
+	 * @author Alexandra
+	 *
+	 */
 	private class MyMouseListeners extends MouseAdapter {
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			super.mouseClicked(e);
-			if(!inGame&&fail) {
+			if(!inGame&&fail) 
 				if(e.getX() >= 270 && e.getX() <= (270+60) )
 					if(e.getY()>=400 && e.getY()<=430)
 					{
-						setVisible(false);
+						lp.setVisible(false);
 						mainm.score+=score;
 						mainm.setVisible(true);
 					}
-			}
-			System.out.println("MouseClicked");
+			
 			if (!inGame && !fail) {
-				System.out.println("MouseClicked::!inGameFail");
 				inGame = true;
 				worker=  new LightWorker();
 				worker.start();
 			} 
-			if(inGame) {
-				System.out.println("MouseClicked::inGameFail");
+			if(inGame) 
 				if (!nextLevel) {
-					System.out.println("MouseClicked::inGameFail::!nextLevel");
 					int x = e.getX();
 					int y = e.getY();
 					System.out.println(x + " " + y);
@@ -250,15 +261,14 @@ public class BoardLightGame extends JPanel{
 					repaint();
 					
 				}
-			}
+			
 		}
 	}
-
-	public void nextLevel() {
+	/**Метод що змінює рівень*/
+	private void nextLevel() {
 		
 		nextLevel = true;
 		score+=1;
-		level++;
 		if(showLights<MAX_COLOR_BLOCK_ON_LEVEL[block_count])
 			showLights++;
 		else {

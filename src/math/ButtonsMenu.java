@@ -3,19 +3,15 @@ package math;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Rectangle;
 
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import math.RandomNumbers.ButtonCancel;
-import math.RandomNumbers.ButtonHelp;
-import math.RandomNumbers.ButtonOk;
 
+@SuppressWarnings("serial")
 public class ButtonsMenu extends JPanel {
 	static JPanel flow;
 	private JButton properties;

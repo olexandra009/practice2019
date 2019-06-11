@@ -18,20 +18,62 @@ import javax.swing.Timer;
 import main_view.MainMenu;
 import tools.Queue;
 
-
+ /**Клас що відповідає за логіку та виконання гри
+ * @author Alexandra
+ *
+ */
+@SuppressWarnings("serial")
 public class BoardWordClass extends JPanel implements ActionListener {
-
+    /**Розміри ігрового поля*/
 	private final int SCREEN_WIDTH = 600;
 	private final int SCREEN_HEIGHT = 600;
 	private int gameplay = 8;
-	private boolean isInitGame = false;
+	
+	 /**Масив зображеннь та імен*/
+	private final int images = 8;
+	private String[] arrayofNames;
+	private Image[] arrayOfImage;
+	
+	 /**Змінні що відповідають за наповнення ігрового поля літерами та кольорами*/
+	private Queue<Character> wordLetter;
+	private char[][] letters;
+	private byte[][] colorLetter;
+	private int game_play_width = 450;
+	private int gp_X = 10;
+	private int gp_Y = 30;
+	
+	 /**Змінні для визначення часу*/
+	private long timeEnd=0;
+	private long timerStart=0;
+	private long currentTime=60;
+	private long time = 60;
+	 /**Бали*/
+	private long score = 0;
+	
+	 /**Змінні що відповідають за стан гри*/
+	private boolean nextLevelInit = false; 
+	private boolean inGame = false;
+	private boolean nextLevel = false;
+	private boolean gameOver = false;
+	private int life = 3;
+	
+	private Image image;
+	private String word;
 	private Timer timer;
-	Random rand ;
-	MainMenu mainm;
-	public BoardWordClass(MainMenu m) {
+	private Random rand ;
+	private MainMenu mainm;
+	private WordPanel wp;
+	
+	
+	/**Конструктор гри
+	 * @param m
+	 * @param w
+	 */
+	public BoardWordClass(MainMenu m, WordPanel w) {
 		timer = new Timer(30, this);
 		timer.start();
 		mainm = m;
+		wp= w;
 		loadImages();
 		 rand = new Random();
 		initGame();
@@ -39,16 +81,8 @@ public class BoardWordClass extends JPanel implements ActionListener {
 		
 	}
 	
-	
-private String[] arrayofNames;
-private Image[] arrayOfImage;
-private final int images = 8;
-private char[][] letters;
-private byte[][] colorLetter;
-private Image image;
-private String word;
-private boolean gameOver = false;
 
+	/**Метод, що завантажує зображення*/
 private void loadImages(){
 	arrayOfImage = new Image[images];
 	arrayofNames = new String[images];
@@ -70,7 +104,7 @@ private void loadImages(){
 	arrayOfImage[7] = new ImageIcon("image/cherry.png").getImage();
 
 }
-
+/**Метод, що ініціалізує гру*/
 private void initGame() {
 	letters = new char [gameplay][gameplay];
 	colorLetter = new byte [gameplay][gameplay];
@@ -104,7 +138,7 @@ private void initGame() {
 		    else if(a ==1066) a= 1028;
 			letters[i][j] =	a;
 		}
-	isInitGame = true;
+	
 }
 @Override
 protected void paintComponent(Graphics g) {
@@ -112,12 +146,8 @@ protected void paintComponent(Graphics g) {
 	drawMaze(g);
 	
 }
-//1,2,3
-int life = 3;
-int game_play_width = 450;
-int gp_X = 10;
-int gp_Y = 30;
 
+/**Метод що малює поле гри*/
 	private void drawMaze(Graphics g) {
 	
 	g.setColor(Color.white);
@@ -213,14 +243,8 @@ int gp_Y = 30;
     }
 
 }
-	Queue<Character> wordLetter;
-	
-	private long timeEnd=0;
-	private long timerStart=0;
-	private long currentTime=60;
-	private long time = 60;
-	private long score = 0;
-	
+
+/**Метод що перевіряє чи вибрана лутера правильна*/
 	private void lightLetter(int x, int y) {
 		if(x<gp_X||x>gp_X+game_play_width) return;
 		if(y<gp_Y||y>gp_Y+game_play_width) return;
@@ -236,25 +260,22 @@ int gp_Y = 30;
         else {
         colorLetter[xa][ya] = (byte) 2;	
         life --;
-        if(life<0) {
+        if(life<=0) {
         timer.stop();	
         gameOver = true;
         repaint();
-        life =0;}
+          }
         }
 	}
-	
+	/**Метод що обраховує час*/
 	private String getTime() {
 		if(timerStart==0)
 			return  "60";
 		timeEnd = System.currentTimeMillis();
 		
 		long time = timeEnd - timerStart;
-		
 		long sec = time / 1000;
-		long mili = time - sec * 1000;
 		long minutes = sec / 60;
-		long last = mili / 10;
 		long secunds = sec - minutes * 60;
 		currentTime = this.time - secunds;
 		System.out.println(time);
@@ -273,7 +294,6 @@ int gp_Y = 30;
 		return t;
 	}
 
-	boolean nextLevelInit = false; 
 	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
@@ -290,9 +310,12 @@ int gp_Y = 30;
         }
 	   
 	}
-	boolean inGame = false;
-	boolean nextLevel = false;
 
+
+	/**
+	 * @author Alexandra
+	 *  Клас що опрацьовує натискання миші
+	 */
 	private class MyMouseListner extends MouseAdapter {
 		@Override
 		public void mouseClicked(MouseEvent e) {
@@ -301,7 +324,8 @@ int gp_Y = 30;
             	if(e.getX() >= 270 && e.getX() <= (270+60) )
 					if(e.getY()>=400 && e.getY()<=430)
 					{
-						setVisible(false);
+						wp.setVisible(false);
+						
 						mainm.setVisible(true);
 					}
             }

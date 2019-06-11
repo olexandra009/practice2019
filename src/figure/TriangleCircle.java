@@ -1,7 +1,6 @@
 package figure;
 
 import java.awt.BorderLayout;
-import java.awt.Button;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
@@ -16,6 +15,7 @@ import javax.swing.Timer;
 
 import main_view.MainMenu;
 
+@SuppressWarnings("serial")
 public class TriangleCircle extends JPanel implements ActionListener {
 	private Random random;
 	private static final int WIDTH = 600;

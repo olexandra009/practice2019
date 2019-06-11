@@ -9,6 +9,7 @@ import java.awt.Rectangle;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+@SuppressWarnings("serial")
 public class ProperiesMenu extends JPanel {
 	static JPanel flow;
 	private JButton back;

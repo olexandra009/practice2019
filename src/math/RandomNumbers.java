@@ -2,25 +2,16 @@ package math;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
@@ -29,6 +20,7 @@ import javax.swing.SpinnerNumberModel;
 
 import main_view.MainMenu;
 
+@SuppressWarnings("serial")
 public class RandomNumbers extends JPanel {
 	protected static RandomNumbers randomNumbers;
 	static int jeneralscore = 0;
@@ -53,6 +45,7 @@ public class RandomNumbers extends JPanel {
 	private int amountOfExamples = 10;
 	private int maxNumbersValue = 10;
 	private int maxOperator = 1;
+	@SuppressWarnings("unused")
 	private int amountOfSolvedExamples = 0;
 	private MainMenu mainm;
 	public RandomNumbers(MainMenu mainMenu) {
@@ -272,6 +265,7 @@ public class RandomNumbers extends JPanel {
 	}
 
 	private JSpinner maxValueSpinner;
+	@SuppressWarnings("rawtypes")
 	private JComboBox editComboBox;
 
 	class SetPropertiesPanel extends JPanel {
@@ -280,6 +274,7 @@ public class RandomNumbers extends JPanel {
 			init();
 		}
 
+		@SuppressWarnings({ "rawtypes", "unchecked" })
 		private void init() {
 			setLayout(new GridLayout(5, 5));
 			JLabel label = new JLabel("Set maximum value to be present int examples:");
@@ -324,7 +319,6 @@ public class RandomNumbers extends JPanel {
 			removeAll();
 			addExamplesToPanel();
 			examplePanel.setBackground(new Color(100,205,100));
-		//	buttonsMenu=new ButtonsMenu();
 			add(rools,BorderLayout.NORTH);
 			add(examplePanel,BorderLayout.CENTER);
 			add(buttonsMenu,BorderLayout.SOUTH);
